@@ -1,22 +1,24 @@
 // a shader variable
 let cam1 = new p5((sketch) => {
   let flower;
+  let flowers;
   let cells;
   let flowerNum = 0;
   let patternNum = 1;
-  let shaderNum = 1;
+  let shaderNum = 0;
   let fade = 0;
 
   sketch.preload = () => {
     // load the shader
     flower = sketch.loadShader("shader.vert", "shaders/flower.frag");
+    flowers = sketch.loadShader("shader.vert", "shaders/flowers.frag");
     cells = sketch.loadShader("shader.vert", "shaders/cells.frag");
   };
 
   sketch.setup = () => {
     sketch.pixelDensity(1);
     // shaders require WEBGL mode to work
-    
+
     sketch.createCanvas(
       sketch.windowWidth,
       sketch.windowHeight,
@@ -29,10 +31,7 @@ let cam1 = new p5((sketch) => {
   sketch.draw = () => {
     // send resolution of sketch into shader
     flower.setUniform("u_time", sketch.frameCount * 0.01);
-    flower.setUniform("u_resolution", [
-      sketch.width,
-      sketch.windowHeight
-    ]);
+    flower.setUniform("u_resolution", [sketch.width, sketch.windowHeight]);
     flower.setUniform("u_mouse", [sketch.mouseX, sketch.mouseY]);
 
     flower.setUniform("u_flowerNum", flowerNum);
@@ -40,30 +39,38 @@ let cam1 = new p5((sketch) => {
     flower.setUniform("u_fade", fade);
 
     cells.setUniform("u_time", sketch.frameCount * 0.01);
-    cells.setUniform("u_resolution", [
-      sketch.width,
-      sketch.windowHeight,
-    ]);
+    cells.setUniform("u_resolution", [sketch.width, sketch.windowHeight]);
     cells.setUniform("u_mouse", [sketch.mouseX, sketch.mouseY]);
 
     cells.setUniform("u_fade", fade);
 
+    // send resolution of sketch into shader
+    flowers.setUniform("u_time", sketch.frameCount * 0.01);
+    flowers.setUniform("u_resolution", [sketch.width, sketch.windowHeight]);
+    flowers.setUniform("u_mouse", [sketch.mouseX, sketch.mouseY]);
+
+    flowers.setUniform("u_flowerNum", flowerNum);
+    flowers.setUniform("u_patternNum", patternNum);
+    flowers.setUniform("u_fade", fade);
     // shader() //sets the active shader with our shader
-    if (shaderNum === 0) {
-      //sketch.shader(flower);
-      sketch.shader(cells);
 
-    } else {
-      sketch.shader(flower);
+    switch (shaderNum) {
+      case 0:
+        sketch.shader(cells);
+        break;
+      case 1:
+        sketch.shader(flower);
+        break;
+      case 2:
+        sketch.shader(flowers);
+        break;
     }
-
     // sketch.shader(flower);
-
 
     // rect gives us some geometry on the screen
     sketch.rect(0, 0, sketch.windowWidth, sketch.height);
     // console.log(sketch.frameCount*0.01);
-    // console.log(shaderNum);
+    //  console.log(shaderNum);
     //sketch.text("hi")
   };
 
@@ -77,11 +84,20 @@ let cam1 = new p5((sketch) => {
       patternNum--;
       fade -= 0.1;
     }
+    
+    switch (sketch.key) {
+      
+      case '0':
+        console.log(sketch.key);
+        shaderNum = 0;
+        break;
+      case '1':
+        shaderNum = 1;
+        break;
 
-    if (sketch.key === "0") {
-      shaderNum = 0;
-    } else if (sketch.key === "1") {
-      shaderNum = 1;
+      case '2':
+        shaderNum = 2;
+        break;
     }
   };
 
