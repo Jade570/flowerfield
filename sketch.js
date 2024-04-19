@@ -7,7 +7,7 @@ let cam1 = new p5((sketch) => {
 
   let flowerNum = 0;
   let patternNum = 1;
-  let shaderNum = 0;
+  let shaderNum = 2;
   let fade = 0;
 
   sketch.preload = () => {

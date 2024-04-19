@@ -86,7 +86,9 @@ void main(){
     float radius = length(toCenter)*100.;
     
     
-    st *= 10.;
+    // st *= 10.;
+    st *= (u_patternNum+1.);
+
     st = fract(st);
     // st = rotate2D(st,PI-u_time);
 
@@ -106,11 +108,11 @@ void main(){
     float f;
     //f = abs(cos(a*(3.+sin(u_time))))-.3;
     // f = abs(cos(a*2.5+u_time))*.5+.3;
-    // f = abs(cos(5.*u_time+a*(2.5+sin(u_time))))*.5+.3;
+    f = abs(cos(5.*u_time+a*(2.5+sin(u_time))))*sin(u_time)-0.5*cos(u_time);
     // f = abs(cos(5.*u_time+a*(2.5+u_flowerNum/2.)))*sin(u_time)-0.5*cos(u_time);
 
     // f = abs(cos(a*(2.5+sin(u_time))))*.5+.3;
-    f = abs(sin(a*2.5));
+    // f = abs(sin(a*2.5));
 
 
     vec3 pattern1 = vec3(0.);
@@ -124,7 +126,6 @@ void main(){
 
     pattern1 -= vec3(smoothstep(f+1., f+1.5,r));
     pattern2 += vec3(smoothstep(f+1., f+1.1, r));
-    pattern2 -= vec3(smoothstep(f+1.1, f+1.5, r));
     
     // curr_pattern += mod(u_patternNum,2.)>0. ? 0.1 : -0.1;
 
