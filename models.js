@@ -1,13 +1,16 @@
 // a shader variable
 let models = new p5((sketch) => {
   let fountain;
+  let spheres = [];
 
   let theShader;
   let shaderTexture;
 
   let x;
   let y;
-  let modelState = 0;
+
+  let texture = 0;
+  let showFountain = false;
 
   sketch.preload = () => {
     fountain = sketch.loadModel("fountain.obj", true);
@@ -46,94 +49,99 @@ let models = new p5((sketch) => {
     shaderTexture.shader(theShader);
     shaderTexture.rect(0, 0, sketch.width, sketch.height);
 
-    switch (modelState) {
+    switch (texture) {
       case 0:
         break;
 
       case 1: // normal map
         sketch.normalMaterial();
-        sketch.translate(0, 0, 0);
-        sketch.push();
-        sketch.rotateX(sketch.frameCount * 0.01);
-        sketch.rotateY(sketch.frameCount * 0.01);
-        sketch.scale(2.0);
-        sketch.model(fountain);
-        sketch.pop();
-
-        sketch.translate(350, 0, 0);
-        sketch.push();
-        sketch.rotateX(sketch.frameCount * 0.01);
-        sketch.rotateY(sketch.frameCount * 0.01);
-        sketch.sphere(125);
-        sketch.scale(2.0);
-        sketch.pop();
         break;
 
       case 2: // wireframe
-        sketch.fill(0,0,0,0);
-        sketch.stroke(1);
-        sketch.translate(0, 0, 0);
-        sketch.push();
-        sketch.rotateX(sketch.frameCount * 0.01);
-        sketch.rotateY(sketch.frameCount * 0.01);
-        sketch.scale(2.0);
-        sketch.model(fountain);
-        sketch.pop();
-
-        sketch.translate(350, 0, 0);
-        sketch.push();
-        sketch.rotateX(sketch.frameCount * 0.01);
-        sketch.rotateY(sketch.frameCount * 0.01);
-        sketch.sphere(125);
-        sketch.scale(2.0);
-        sketch.pop();
+        sketch.fill(0, 0, 0, 0);
+        sketch.stroke(255);
         break;
 
       case 3: // water map
         sketch.texture(shaderTexture);
         sketch.noStroke();
-        sketch.translate(0, 0, 0);
-        sketch.push();
-        sketch.rotateX(sketch.frameCount * 0.01);
-        sketch.rotateY(sketch.frameCount * 0.01);
-        sketch.scale(2.0);
-        sketch.model(fountain);
-        sketch.pop();
+        break;
 
-        sketch.translate(350, 0, 0);
-        sketch.push();
-        sketch.rotateX(sketch.frameCount * 0.01);
-        sketch.rotateY(sketch.frameCount * 0.01);
-        sketch.sphere(125);
-        sketch.scale(2.0);
-        sketch.pop();
+      case 4: // wireframe fill
+        sketch.fill(255, 255);
+        sketch.stroke(0);
         break;
     }
-    // sketch.normalMaterial();
+
+    if (showFountain) {
+      sketch.push();
+      sketch.translate(0, 0, 0);
+      sketch.push();
+      sketch.rotateX(sketch.frameCount * 0.01);
+      // sketch.rotateY(sketch.frameCount * 0.01);
+      sketch.rotateZ(sketch.frameCount * 0.01);
+      sketch.scale(2.0);
+      sketch.model(fountain);
+      sketch.pop();
+      sketch.pop();
+    } else {
+    }
+
+    for (poly of spheres) {
+      sketch.push();
+      polygons(poly[0], poly[1], poly[2], poly[3], poly[4], poly[5]);
+      sketch.pop();
+    }
   };
 
   sketch.keyPressed = () => {
     if (sketch.keyCode === sketch.UP_ARROW) {
     } else if (sketch.keyCode === sketch.DOWN_ARROW) {
+    } else if (sketch.keyCode === sketch.LEFT_ARROW) {
+      spheres.pop();
+    } else if (sketch.keyCode === sketch.RIGHT_ARROW) {
+      spheres.push([
+        sketch.random(0.3, 2),
+        Math.floor(sketch.random(4, 24)),
+        Math.floor(sketch.random(4, 24)),
+        sketch.random(-(sketch.windowWidth / 2), sketch.windowWidth / 2),
+        sketch.random(-(sketch.windowHeight / 2), sketch.windowHeight / 2),
+        0,
+      ]);
+    } else if (sketch.keyCode === sketch.ENTER) {
+      showFountain = !showFountain;
     }
 
     switch (sketch.key) {
       case "q":
-        modelState = 0;
+        texture = 0;
         break;
       case "w":
-        modelState = 1;
+        texture = 1;
         break;
       case "e":
-        modelState = 2;
+        texture = 2;
         break;
       case "r":
-        modelState = 3;
+        texture = 3;
         break;
+      case "t":
+        texture = 4;
     }
   };
 
   sketch.windowResized = () => {
     sketch.resizeCanvas(sketch.windowWidth, sketch.windowHeight);
+  };
+
+  polygons = (size, detailX, detailY, x, y, z) => {
+    sketch.translate(x, y, z);
+    sketch.push();
+    sketch.rotateZ(sketch.frameCount * 0.0001 * x);
+    sketch.rotateX(sketch.frameCount * 0.0001 * y);
+    sketch.rotateY(sketch.frameCount * 0.0001 * z);
+    sketch.scale(size);
+    sketch.sphere(50, detailX, detailY);
+    sketch.pop();
   };
 });
