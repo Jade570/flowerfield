@@ -1,6 +1,7 @@
 // a shader variable
 let theShader;
 let flowerNum = 0;
+let patternNum = 1;
 
 function preload(){
   // load the shader
@@ -20,19 +21,24 @@ function draw() {
   theShader.setUniform('u_resolution', [width, windowHeight]);
   theShader.setUniform("u_mouse", [mouseX, mouseY]);
   theShader.setUniform("u_flowerNum", flowerNum);
+  theShader.setUniform("u_patternNum", patternNum);
 
   // shader() sets the active shader with our shader
   shader(theShader);
 
   // rect gives us some geometry on the screen
   rect(0,0,windowWidth, height);
+
 }
 
 function keyPressed(){
   if (keyCode === UP_ARROW) {
-    flowerNum ++;
+    // flowerNum ++;
+    patternNum ++;
   } else if (keyCode === DOWN_ARROW) {
-    flowerNum --;
+   // flowerNum --;
+    patternNum --;
+
   } 
 }
 

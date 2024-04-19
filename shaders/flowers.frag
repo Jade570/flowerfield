@@ -13,6 +13,39 @@ uniform vec2 u_mouse;
 uniform float u_time;
 uniform float u_flowerNum;
 
+uniform float u_patternNum;
+
+// 2D Random
+float random (in vec2 st) {
+    return fract(sin(dot(st.xy,
+                         vec2(12.9898,78.233)))
+                 * 43758.5453123);
+}
+
+// 2D Noise based on Morgan McGuire @morgan3d
+// https://www.shadertoy.com/view/4dS3Wd
+float noise (in vec2 st) {
+    vec2 i = floor(st);
+    vec2 f = fract(st);
+
+    // Four corners in 2D of a tile
+    float a = random(i);
+    float b = random(i + vec2(1.0, 0.0));
+    float c = random(i + vec2(0.0, 1.0));
+    float d = random(i + vec2(1.0, 1.0));
+
+    // Smooth Interpolation
+
+    // Cubic Hermine Curve.  Same as SmoothStep()
+    vec2 u = f*f*(3.0-2.0*f);
+    // u = smoothstep(0.,1.,f);
+
+    // Mix 4 coorners percentages
+    return mix(a, b, u.x) +
+            (c - a)* u.y * (1.0 - u.x) +
+            (d - b) * u.x * u.y;
+}
+
 vec2 rotate2D(vec2 _st, float _angle){
     _st -= 0.5;
     _st =  mat2(cos(_angle),-sin(_angle),
@@ -39,7 +72,7 @@ vec2 skew (vec2 st) {
 
 void main(){
     vec2 st = gl_FragCoord.xy/u_resolution.xy;
-    // st = rotate2D(st,PI*sin(u_time)+1.);
+    // st = rotate2D(st,PI+u_time);
     vec3 color = vec3(0.0);
     vec3 bgcolor = vec3(0.);
 
@@ -52,7 +85,7 @@ void main(){
     
     st *= 10.;
     st = fract(st);
-    // st = rotate2D(st,PI*sin(u_time)+1.);
+    // st = rotate2D(st,PI-u_time);
 
     st.x *= u_resolution.x/u_resolution.y;
 
@@ -70,34 +103,41 @@ void main(){
     float f;
     //f = abs(cos(a*(3.+sin(u_time))))-.3;
     // f = abs(cos(a*2.5+u_time))*.5+.3;
-    f = abs(cos(5.*u_time+a*(2.5+sin(u_time))))*.5+.3;
-    f = abs(cos(5.*u_time+a*(2.5+u_flowerNum/2.)))*sin(u_time)+0.5;
+    // f = abs(cos(5.*u_time+a*(2.5+sin(u_time))))*.5+.3;
+    // f = abs(cos(5.*u_time+a*(2.5+u_flowerNum/2.)))*sin(u_time)-0.5*cos(u_time);
 
     // f = abs(cos(a*(2.5+sin(u_time))))*.5+.3;
-    // f = abs(cos(a*12.)*sin(a*3.))*.8+.1;
+    f = abs(sin(a*2.5))+.3+noise(vec2(sin(u_time)));
 
 
     vec3 pattern1 = vec3(0.);
+    
 
-    for(float i = 1.; i<10.; i+=2.){
-        pattern1 += vec3(smoothstep(f+i/10.,f+(i+1.)/10.,r));
+    for(float i = 1.; i<10.; i+= 1.)
+    {
+         pattern1 += mod(i,2.)>0. ?vec3(smoothstep(f+i/10.,f+(i+1.)/10.,r)) : -vec3(smoothstep(f+i/10.,f+(i+1.)/10.,r));
     }
-    for(float i = 2.; i<10.; i+=2.){
-        pattern1 -= vec3(smoothstep(f+i/10.,f+(i+1.)/10.,r));
-    }
+    vec3 pattern2 = vec3(1.)-pattern1;
+
     pattern1 -= vec3(smoothstep(f+1., f+1.5,r));
+    pattern2 += vec3(smoothstep(f+1., f+1.1, r));
+    pattern2 -= vec3(smoothstep(f+1.1, f+1.5, r));
+    
+    // curr_pattern += mod(u_patternNum,2.)>0. ? 0.1 : -0.1;
 
-    // color = hsb2rgb(vec3(smoothstep(f,f+0.5,r)-(angle/TWO_PI)+0.5,radius,1.0));
     color = hsb2rgb(vec3((angle/TWO_PI)+0.5,radius,1.0));
-
     // rgb background, black flower
-    color = vec3(bgst.x,bgst.y,abs(sin(u_time))) - vec3(1.) + pattern1;
+    // color = vec3(bgst.x,bgst.y,abs(sin(u_time))) - vec3(1.) + pattern1;
 
     // black background, rgb flower
-    // color = vec3(bgst.x,bgst.y,abs(sin(u_time))) - pattern1;
-
+    color = mod(u_patternNum, 2.) > 0.5 ? vec3(bgst.x,bgst.y,abs(sin(u_time))) - pattern2 : vec3(bgst.x,bgst.y,abs(sin(u_time))) - pattern1;
+    
+    
+    //윤슬
+    color += smoothstep(.08,.2,noise(bgst*10.+u_time)+sin(u_time)/3.)*0.35;
+    color -= smoothstep(.25,.4,noise(bgst*10.+u_time)+sin(u_time)/3.)*0.35;
     // black background, white flower
-    // color = vec3(1.) - pattern1;
+    // color = vec3(0.) + pattern1;
 
     gl_FragColor = vec4(color, 1.0);
 }
