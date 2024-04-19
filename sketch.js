@@ -91,7 +91,7 @@ let cam1 = new p5((sketch) => {
     }
 
     switch (sketch.key) {
-      case "0":
+      case "4":
         shaderNum = 0;
         break;
       case "1":
