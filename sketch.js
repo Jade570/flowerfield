@@ -28,6 +28,7 @@ function draw() {
 
   // rect gives us some geometry on the screen
   rect(0,0,windowWidth, height);
+  // console.log(frameCount*0.01);
 
 }
 
