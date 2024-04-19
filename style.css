@@ -1,0 +1,32 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  /* canvas {
+    display: flex;
+  } */
+
+/* #cells{
+    position:relative;
+    top:-100vh;
+    opacity: 0.2;
+  }
+
+#lines{
+  position:relative;
+  top: -200vh;
+  opacity: 0.2;
+} */
+
+/* #shader{
+  position:relative;
+  top:-200vh;
+  opacity:1;
+} */
+/*   
+#flowers{
+  position: relative;
+  top:-1080px;
+  opacity:0.3;
+} */
