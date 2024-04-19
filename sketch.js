@@ -77,17 +77,18 @@ let cam1 = new p5((sketch) => {
     }
 
     sketch.rect(0, 0, sketch.windowWidth, sketch.height);
+  console.log(fade);
   };
 
   sketch.keyPressed = () => {
     if (sketch.keyCode === sketch.UP_ARROW) {
       // flowerNum ++;
       patternNum++;
-      fade += 0.1;
+      fade = fade < 1 ? fade + 0.1 : 1;
     } else if (sketch.keyCode === sketch.DOWN_ARROW) {
       // flowerNum --;
       patternNum--;
-      fade -= 0.1;
+      fade = fade > -0.7 ? fade - 0.1 : -0.7;
     }
 
     switch (sketch.key) {
