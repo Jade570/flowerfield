@@ -10,7 +10,6 @@ html, body {
 #cam2{
     position:relative;
     top:-100vh;
-    opacity: 0.2;
   }
 
 #lines{
