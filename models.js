@@ -9,8 +9,9 @@ let models = new p5((sketch) => {
   let x;
   let y;
 
-  let texture = 0;
+  let texture = 1;
   let showFountain = false;
+  let showModels = false;
 
   sketch.preload = () => {
     fountain = sketch.loadModel("fountain.obj", true);
@@ -50,9 +51,6 @@ let models = new p5((sketch) => {
     shaderTexture.rect(0, 0, sketch.width, sketch.height);
 
     switch (texture) {
-      case 0:
-        break;
-
       case 1: // normal map
         sketch.normalMaterial();
         break;
@@ -73,24 +71,27 @@ let models = new p5((sketch) => {
         break;
     }
 
-    if (showFountain) {
-      sketch.push();
-      sketch.translate(0, 0, 0);
-      sketch.push();
-      sketch.rotateX(sketch.frameCount * 0.01);
-      // sketch.rotateY(sketch.frameCount * 0.01);
-      sketch.rotateZ(sketch.frameCount * 0.01);
-      sketch.scale(2.0);
-      sketch.model(fountain);
-      sketch.pop();
-      sketch.pop();
+    if (showModels) {
     } else {
-    }
+      if (showFountain) {
+        sketch.push();
+        sketch.translate(0, 0, 0);
+        sketch.push();
+        sketch.rotateX(sketch.frameCount * 0.01);
+        // sketch.rotateY(sketch.frameCount * 0.01);
+        sketch.rotateZ(sketch.frameCount * 0.01);
+        sketch.scale(2.0);
+        sketch.model(fountain);
+        sketch.pop();
+        sketch.pop();
+      } else {
+      }
 
-    for (poly of spheres) {
-      sketch.push();
-      polygons(poly[0], poly[1], poly[2], poly[3], poly[4], poly[5]);
-      sketch.pop();
+      for (poly of spheres) {
+        sketch.push();
+        polygons(poly[0], poly[1], poly[2], poly[3], poly[4], poly[5]);
+        sketch.pop();
+      }
     }
   };
 
@@ -114,7 +115,7 @@ let models = new p5((sketch) => {
 
     switch (sketch.key) {
       case "q":
-        texture = 0;
+        showModels = !showModels;
         break;
       case "w":
         texture = 1;
