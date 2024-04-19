@@ -11,7 +11,7 @@ let models = new p5((sketch) => {
 
   let texture = 1;
   let showFountain = false;
-  let showModels = false;
+  let showModels = true;
 
   sketch.preload = () => {
     fountain = sketch.loadModel("fountain.obj", true);
@@ -72,7 +72,6 @@ let models = new p5((sketch) => {
     }
 
     if (showModels) {
-    } else {
       if (showFountain) {
         sketch.push();
         sketch.translate(0, 0, 0);
@@ -92,6 +91,7 @@ let models = new p5((sketch) => {
         polygons(poly[0], poly[1], poly[2], poly[3], poly[4], poly[5]);
         sketch.pop();
       }
+    } else {
     }
   };
 
@@ -116,6 +116,10 @@ let models = new p5((sketch) => {
     switch (sketch.key) {
       case "q":
         showModels = !showModels;
+        break;
+      case "a":
+        showModels = false;
+        spheres = [];
         break;
       case "w":
         texture = 1;
