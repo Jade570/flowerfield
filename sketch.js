@@ -4,13 +4,13 @@ let cam1 = new p5((sketch) => {
   let cells;
   let flowerNum = 0;
   let patternNum = 1;
-  let shaderNum = 0;
+  let shaderNum = 1;
   let fade = 0;
 
   sketch.preload = () => {
     // load the shader
-    flower = sketch.loadShader("shader.vert", "shaders/flowers.frag");
-    cells = sketch.loadShader("shader.vert", "shaders/a.frag");
+    flower = sketch.loadShader("shader.vert", "shaders/flower.frag");
+    cells = sketch.loadShader("shader.vert", "shaders/cells.frag");
   };
 
   sketch.setup = () => {
@@ -48,37 +48,23 @@ let cam1 = new p5((sketch) => {
 
     cells.setUniform("u_fade", fade);
 
-    // shader() sets the active shader with our shader
-    // if (shaderNum === 0) {
-    //   sketch.shader(flower);
-    //   sketch.shader(cells);
-
-    // } else {
-    //   sketch.shader(flower);
-    // }
-
-
-
-    if( shaderNum == 1){
-      if(fade<=2){
-        fade += 0.03;
-      }
-    }else{
-      if(fade>=0){
-        fade -= 0.03;
-      } 
-    }
-
-    if(fade>=1){
-      sketch.shader(flower);
-    }else{
+    // shader() //sets the active shader with our shader
+    if (shaderNum === 0) {
+      //sketch.shader(flower);
       sketch.shader(cells);
+
+    } else {
+      sketch.shader(flower);
     }
+
+    // sketch.shader(flower);
 
 
     // rect gives us some geometry on the screen
     sketch.rect(0, 0, sketch.windowWidth, sketch.height);
-    // console.log(frameCount*0.01);
+    // console.log(sketch.frameCount*0.01);
+    // console.log(shaderNum);
+    //sketch.text("hi")
   };
 
   sketch.keyPressed = () => {

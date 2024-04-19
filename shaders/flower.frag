@@ -100,39 +100,29 @@ void main(){
 
     float a = atan(pos.y,pos.x);
 
-    float f;
-    //f = abs(cos(a*(3.+sin(u_time))))-.3;
-    // f = abs(cos(a*2.5+u_time))*.5+.3;
-    // f = abs(cos(5.*u_time+a*(2.5+sin(u_time))))*.5+.3;
-    // f = abs(cos(5.*u_time+a*(2.5+u_flowerNum/2.)))*sin(u_time)-0.5*cos(u_time);
-
-    // f = abs(cos(a*(2.5+sin(u_time))))*.5+.3;
-    f = abs(sin(a*2.5))+.01+noise(st*u_time);
+    float f = (abs(sin(a*2.5))+.01)*noise(st*u_time);
 
 
     vec3 pattern1 = vec3(0.);
-    
-
     for(float i = -9.; i<10.; i+= 1.)
     {
          pattern1 += mod(i,2.)>0. ?vec3(smoothstep(f+i/10.,f+(i+1.)/10.,r)) : -vec3(smoothstep(f+i/10.,f+(i+1.)/10.,r));
     }
-    vec3 pattern2 = vec3(1.)-pattern1;
-
     pattern1 -= vec3(smoothstep(f+1., f+1.5,r));
-    pattern2 += vec3(smoothstep(f+1., f+1.1, r));
-    pattern2 -= vec3(smoothstep(f+1.1, f+1.5, r));
     
-    color = mod(u_patternNum, 2.) > 0.5 ? vec3(bgst.x,bgst.y,abs(sin(u_time))) - pattern2 : vec3(bgst.x,bgst.y,abs(sin(u_time))) - pattern1;
+    color = vec3(bgst.x,bgst.y,abs(sin(u_time))) - pattern1*clamp(0., 1.,u_time*0.1);
     
     
     //윤슬
-    color += smoothstep(.08,.2,noise(bgst*10.+u_time)+sin(u_time)/3.)*0.35;
-    color -= smoothstep(.25,.4,noise(bgst*10.+u_time)+sin(u_time)/3.)*0.35;
+    color += smoothstep(.08,.2,noise(bgst*10.+u_time)+sin(u_time)/3.)*0.25;
+    color -= smoothstep(.25,.4,noise(bgst*10.+u_time)+sin(u_time)/3.)*0.25;
     // black background, white flower
     // color = vec3(0.) + pattern1;
     // color -= vec3(clamp(u_time,0.,25. )*0.05);
-    color -= vec3(u_time*0.05);
+
+     color -= vec3(clamp(0.,0.99,u_time*0.01));
+
+
 
     gl_FragColor = vec4(color, 1.0);
 }

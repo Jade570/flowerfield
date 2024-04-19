@@ -116,7 +116,7 @@ void main(){
     
     //윤슬
     color += smoothstep(.08,.2,noise(bgst*10.+u_time)+sin(u_time)/3.)*0.35;
-    color -= smoothstep(.25,.4,noise(bgst*10.+u_time)+sin(u_time)/3.)*0.35;
+    color -= smoothstep(.25,.5,noise(bgst*10.+u_time)+sin(u_time)/3.)*0.35;
 
 
     vec3 cellcolor = vec3(.329,.412,.38);
