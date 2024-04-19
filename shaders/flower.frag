@@ -84,11 +84,11 @@ void main(){
     
     
     // st *= 10.;
-    st = fract(st);
-    // st = rotate2D(st,PI-u_time);
-
+    // st = fract(st);
+   
+    
     st.x *= u_resolution.x/u_resolution.y;
-
+    st = rotate2D(st,PI-u_time*0.5);
     // Tile the space
     vec2 i_st = floor(st);
     vec2 f_st = fract(st);
@@ -107,13 +107,13 @@ void main(){
     // f = abs(cos(5.*u_time+a*(2.5+u_flowerNum/2.)))*sin(u_time)-0.5*cos(u_time);
 
     // f = abs(cos(a*(2.5+sin(u_time))))*.5+.3;
-    f = abs(sin(a*2.5))+.3+noise(st*u_time);
+    f = abs(sin(a*2.5))+.01+noise(st*u_time);
 
 
     vec3 pattern1 = vec3(0.);
     
 
-    for(float i = 1.; i<10.; i+= 1.)
+    for(float i = -9.; i<10.; i+= 1.)
     {
          pattern1 += mod(i,2.)>0. ?vec3(smoothstep(f+i/10.,f+(i+1.)/10.,r)) : -vec3(smoothstep(f+i/10.,f+(i+1.)/10.,r));
     }
@@ -123,13 +123,6 @@ void main(){
     pattern2 += vec3(smoothstep(f+1., f+1.1, r));
     pattern2 -= vec3(smoothstep(f+1.1, f+1.5, r));
     
-    // curr_pattern += mod(u_patternNum,2.)>0. ? 0.1 : -0.1;
-
-    color = hsb2rgb(vec3((angle/TWO_PI)+0.5,radius,1.0));
-    // rgb background, black flower
-    // color = vec3(bgst.x,bgst.y,abs(sin(u_time))) - vec3(1.) + pattern1;
-
-    // black background, rgb flower
     color = mod(u_patternNum, 2.) > 0.5 ? vec3(bgst.x,bgst.y,abs(sin(u_time))) - pattern2 : vec3(bgst.x,bgst.y,abs(sin(u_time))) - pattern1;
     
     
@@ -138,6 +131,8 @@ void main(){
     color -= smoothstep(.25,.4,noise(bgst*10.+u_time)+sin(u_time)/3.)*0.35;
     // black background, white flower
     // color = vec3(0.) + pattern1;
+    // color -= vec3(clamp(u_time,0.,25. )*0.05);
+    color -= vec3(u_time*0.05);
 
     gl_FragColor = vec4(color, 1.0);
 }

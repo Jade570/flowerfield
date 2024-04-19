@@ -1,13 +1,13 @@
 html, body {
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow: auto;
   }
   /* canvas {
     display: flex;
   } */
 
-/* #cells{
+#cam2{
     position:relative;
     top:-100vh;
     opacity: 0.2;
