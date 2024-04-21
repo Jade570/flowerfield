@@ -69,6 +69,13 @@ let models = new p5((sketch) => {
         sketch.fill(255, 255);
         sketch.stroke(0);
         break;
+
+      case 5: // wireframe fill
+      sketch.ambientLight(100);
+      sketch.directionalLight(255,255,255,-1,-1,1);
+        sketch.fill(255, 255);
+        sketch.noStroke();
+        break;
     }
 
     if (showModels) {
@@ -132,6 +139,10 @@ let models = new p5((sketch) => {
         break;
       case "t":
         texture = 4;
+        break;
+      case "y":
+        texture = 5;
+        break;
     }
   };
 

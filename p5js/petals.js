@@ -2,11 +2,15 @@ let petals = new p5((sketch) => {
   var blobs;
   var gridSz;
 
-  sketch.setup = ()=>{
-    sketch.createCanvas(sketch.windowWidth, sketch.windowHeight,document.getElementById('petals'));
+  sketch.setup = () => {
+    sketch.createCanvas(
+      sketch.windowWidth,
+      sketch.windowHeight,
+      document.getElementById("cam3")
+    );
     sketch.angleMode(sketch.DEGREES);
     sketch.background(0);
-    sketch.frameRate(5);
+    sketch.frameRate(2);
 
     gridSz = 100; // Each grid size will be 100 px w/h
     blobs = [];
@@ -22,10 +26,11 @@ let petals = new p5((sketch) => {
         blobs.push(obj);
       }
     }
-  }
+  };
 
-  sketch.draw = ()=> {
-    sketch.background("#242b29");
+  sketch.draw = () => {
+    // sketch.background("#242b29");
+    sketch.clear();
     for (var i = 0; i < blobs.length; i++) {
       blobs[i].display();
     }
@@ -52,7 +57,19 @@ let petals = new p5((sketch) => {
       }
     }
     //sketch.resizeCanvas(sketch.windowWidth, sketch.windowHeight);
-  }
+  };
+
+  sketch.keyPressed = () => {
+    if (sketch.keyCode === sketch.UP_ARROW) {
+      // flowerNum ++;
+      patternNum++;
+      fade = fade < 1 ? fade + 0.1 : 1;
+    } else if (sketch.keyCode === sketch.DOWN_ARROW) {
+      // flowerNum --;
+      patternNum--;
+      fade = fade > -0.7 ? fade - 0.1 : -0.7;
+    }
+  };
 
   class Blob {
     constructor(x, y, rad, col) {
@@ -71,11 +88,19 @@ let petals = new p5((sketch) => {
       this.blobObj = [];
       sketch.push();
       sketch.noFill();
-      sketch.translate(this.x + sketch.random(-5, 5), this.y + sketch.random(-5, 5));
+      sketch.translate(
+        this.x + sketch.random(-5, 5),
+        this.y + sketch.random(-5, 5)
+      );
       sketch.beginShape(); // start to draw custom shape
       sketch.stroke(this.col);
-      var d = sketch.dist(this.x, this.y, sketch.width * 0.5, sketch.height * 0.5);
-      sketch.strokeWeight(1);
+      var d = sketch.dist(
+        this.x,
+        this.y,
+        sketch.width * 0.5,
+        sketch.height * 0.5
+      );
+      sketch.strokeWeight(2);
       for (var i = 0; i < sketch.random(4, 15); i++) {
         var randRad = sketch.min(
           this.rad,

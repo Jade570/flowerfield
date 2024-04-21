@@ -7,10 +7,16 @@ html, body {
     display: flex;
   } */
 
-#cam2{
+  #cam2{
     position:relative;
     top:-100vh;
   }
+
+  /* #cam3{
+    position:relative;
+    top:-100vh;
+  } */
+
 
 #lines{
   position:relative;

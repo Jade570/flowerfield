@@ -77,7 +77,7 @@ let cam1 = new p5((sketch) => {
     }
 
     sketch.rect(0, 0, sketch.windowWidth, sketch.height);
-  console.log(fade);
+
   };
 
   sketch.keyPressed = () => {
