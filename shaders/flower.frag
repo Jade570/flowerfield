@@ -100,7 +100,7 @@ void main(){
 
     float a = atan(pos.y,pos.x);
 
-    float f = (abs(sin(a*2.5))+.01)*noise(st*u_time);
+    float f = (abs(sin(a*2.5))+.01)*noise(st*u_time*0.1);
 
 
     vec3 pattern1 = vec3(0.);
@@ -110,14 +110,14 @@ void main(){
     }
     pattern1 -= vec3(smoothstep(f+1., f+1.5,r));
     
-    color = vec3(bgst.x,bgst.y,abs(sin(u_time))) - pattern1*clamp(0., 1.,u_time*0.1);
+    color = vec3(bgst.x,bgst.y,abs(sin(u_time))) - pattern1*clamp(0., 1.,u_time*0.2);
     
     
     //윤슬
     color += smoothstep(.08,.2,noise(bgst*10.+u_time)+sin(u_time)/3.)*0.25;
     color -= smoothstep(.25,.4,noise(bgst*10.+u_time)+sin(u_time)/3.)*0.25;
 
-    color -= vec3(clamp(0.,0.99,u_time*0.01));
+    color -= vec3(clamp(0.,0.99,u_time*0.003));
 
 
 
