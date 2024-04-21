@@ -118,7 +118,7 @@ void main(){
     color += smoothstep(.08,.2,noise(bgst*10.+u_time)+sin(u_time)/3.)*0.25;
     color -= smoothstep(.25,.4,noise(bgst*10.+u_time)+sin(u_time)/3.)*0.25;
 
-    color -= vec3(clamp(0.,0.99,u_time*0.001));
+    color -= vec3(clamp(0.,0.99,u_time*0.0001));
     color -= vec3(u_flowerFade);
 
 
