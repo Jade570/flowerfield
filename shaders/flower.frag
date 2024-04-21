@@ -12,6 +12,7 @@ uniform vec2 u_resolution;
 uniform vec2 u_mouse;
 uniform float u_time;
 uniform float u_flowerNum;
+uniform float u_flowerFade;
 
 uniform float u_patternNum;
 
@@ -118,6 +119,7 @@ void main(){
     color -= smoothstep(.25,.4,noise(bgst*10.+u_time)+sin(u_time)/3.)*0.25;
 
     color -= vec3(clamp(0.,0.99,u_time*0.003));
+    color -= vec3(u_flowerFade);
 
 
 

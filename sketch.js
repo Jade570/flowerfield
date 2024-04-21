@@ -9,6 +9,7 @@ let cam1 = new p5((sketch) => {
   let patternNum = 1;
   let shaderNum = 0;
   let fade = 0;
+  let flowerFade = 0;
 
   sketch.preload = () => {
     // load the shader
@@ -39,7 +40,7 @@ let cam1 = new p5((sketch) => {
 
     flower.setUniform("u_flowerNum", flowerNum);
     flower.setUniform("u_patternNum", patternNum);
-    flower.setUniform("u_fade", fade);
+    flower.setUniform("u_flowerFade", flowerFade);
 
     cells.setUniform("u_time", sketch.frameCount * 0.01);
     cells.setUniform("u_resolution", [sketch.width, sketch.windowHeight]);
@@ -89,6 +90,9 @@ let cam1 = new p5((sketch) => {
       // flowerNum --;
       patternNum--;
       fade = fade > -0.7 ? fade - 0.1 : -0.7;
+    }
+    else if(sketch.keyCode === sketch.SHIFT){
+      flowerFade += 0.1;
     }
 
     switch (sketch.key) {
